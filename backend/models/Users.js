@@ -27,6 +27,8 @@ const userSchema = new mongoose.Schema(
       required: true,
       minlength: 6, // Minimum password length
     },
+    PasswordResetToken: String,
+    resetPasswordExpiresAt: Date,
     refreshToken: { type: String }, // For refresh tokens
   },
   { timestamps: true }

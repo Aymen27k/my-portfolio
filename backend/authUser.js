@@ -9,7 +9,9 @@ const mongoose = require("mongoose");
 const User = require("./models/Users.js");
 const connectDB = require("./models/connectDB");
 const cors = require("cors");
+const crypto = require("crypto"); // Add this line at the top of your file
 const authMiddleware = require("./authMiddleware");
+const nodemailer = require("nodemailer");
 app.use(express.json());
 
 //DataBase connection
@@ -177,6 +179,45 @@ app.post("/users/refresh_token", async (req, res) => {
   } catch (error) {
     console.error("Error in refresh token endpoint:", error);
     res.status(500).json({ message: "Error in refresh token process" });
+  }
+});
+app.post("/users/forgot-password", async (req, res) => {
+  const { email } = req.body;
+  console.log(email);
+  try {
+    // 1. Check if user exists
+    const user = await User.findOne({ email }); // Replace User with your user model
+    if (!user) {
+      return res.status(404).json({ message: "Email not found" });
+    }
+
+    // 2. Generate unique token
+    const token = crypto.randomBytes(32).toString("hex");
+    const expiry = Date.now() + 3600000; // 1 hour expiry (in milliseconds)
+
+    // 3. Store token in database
+    user.PasswordResetToken = token;
+    user.resetPasswordExpiresAt = expiry;
+    await user.save();
+
+    // 4. Send password reset email (configure nodemailer transporter)
+    const transporter = nodemailer.createTransport({
+      host: "localhost",
+      port: 1025,
+      secure: false,
+    });
+    const mailOptions = {
+      from: "noreply@example.com",
+      to: user.email,
+      subject: "Password Reset",
+      html: `<p>Click <a href="https://yourwebsite.com/reset-password?token=${token}">here</a> to reset your password.</p>`,
+    };
+    await transporter.sendMail(mailOptions);
+
+    res.json({ message: "Password reset email sent" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Something went wrong" });
   }
 });
 app.listen(port, () => {
