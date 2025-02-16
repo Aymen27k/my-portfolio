@@ -82,7 +82,7 @@ function Login({ setIsLoggedIn }) {
             <button className="btn btn-primary">Sign in</button>
           </div>
           <p className="form-links mt-2">
-            Forgot <a href="">Password?</a>
+            Forgot <Link to="/forgotPassword">Password?</Link>
             <Link to="/signup" className="ms-2">
               Sign up
             </Link>

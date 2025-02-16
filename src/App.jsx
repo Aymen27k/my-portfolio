@@ -12,6 +12,7 @@ import Home from "./Home.jsx";
 import Books from "./books.jsx";
 import TodoList from "./TodoList.jsx";
 import Signup from "./Signup.jsx";
+import ForgotPassword from "./ForgotPassword.jsx";
 import Login from "./Login.jsx";
 import ISSLocation from "./IssLocation.jsx";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -43,6 +44,7 @@ const App = () => {
             }
           />
           <Route path="/Signup" element={<Signup />} />
+          <Route path="/ForgotPassword" element={<ForgotPassword />} />
           <Route path="/ISSLocation" element={<ISSLocation />} />
         </Routes>
       </Router>

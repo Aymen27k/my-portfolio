@@ -183,7 +183,6 @@ app.post("/users/refresh_token", async (req, res) => {
 });
 app.post("/users/forgot-password", async (req, res) => {
   const { email } = req.body;
-  console.log(email);
   try {
     // 1. Check if user exists
     const user = await User.findOne({ email }); // Replace User with your user model
