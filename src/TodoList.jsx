@@ -6,8 +6,8 @@ function TodoList({ setIsLoggedIn }) {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState("");
   const [selectedTasks, setSelectedTasks] = useState([]);
-  /*const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);*/
+  const [loading, setLoading] = useState(true);
+  //const [error, setError] = useState(null);
   const [username, setUsername] = useState(null);
   const loggedInUserId = localStorage.getItem("userId");
 
@@ -33,15 +33,18 @@ function TodoList({ setIsLoggedIn }) {
     );
   }
 
-  //function to getTasks from the DB
+  /** function to getTasks from the DB, Get the Specific user's List using his ID*/
   async function getTasks() {
     const userId = localStorage.getItem("userId");
+    setLoading(true);
     try {
       const response = await api.get("/todos", { params: { userId: userId } });
       const tasks = response.data;
       return tasks;
     } catch (err) {
       console.error("Error fetching data : ", err);
+    } finally {
+      setLoading(false);
     }
   }
   //Async function to display the Data in my list
@@ -60,8 +63,10 @@ function TodoList({ setIsLoggedIn }) {
   }, []);
   //Function that add tasks
   async function addTask() {
+    setLoading(true);
     const newText = { text: newTask, completed: false, userId: loggedInUserId };
     if (newTask.trim() === "") {
+      setLoading(false);
       return;
     }
     //Verification for duplication
@@ -71,6 +76,7 @@ function TodoList({ setIsLoggedIn }) {
       console.error("Task already exist");
       window.alert("Task already exists !");
       setNewTask("");
+      setLoading(false);
       return;
     }
     try {
@@ -80,6 +86,8 @@ function TodoList({ setIsLoggedIn }) {
       setNewTask("");
     } catch (error) {
       console.error("Couldn't add Task : ", error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -94,12 +102,6 @@ function TodoList({ setIsLoggedIn }) {
       const response = await api.patch(`/todos/${id}/complete`, {
         completed: !taskToUpdate.completed,
       });
-      if (!taskToUpdate) {
-        throw new Error("Task not found"); // Handle the case where the task is not found
-      }
-      if (!response.data) {
-        throw new Error("Failed to update task");
-      }
       console.log(response.data);
       setTasks((prevTasks) =>
         prevTasks.map((task) =>
@@ -133,15 +135,6 @@ function TodoList({ setIsLoggedIn }) {
           return;
         }
 
-        if (response.status !== 200) {
-          const errorData = await response.data; // Try to get error details from the server
-          throw new Error(
-            `Error deleting completed tasks: ${response.status} - ${
-              errorData?.message || response.statusText
-            }`
-          );
-        }
-
         console.log(response.data); // Log the response data
 
         setTasks((prevTasks) => prevTasks.filter((task) => !task.completed));
@@ -157,15 +150,6 @@ function TodoList({ setIsLoggedIn }) {
     try {
       const response = await api.delete(`/todos/${id}`); // Use api.delete
 
-      if (response.status !== 200) {
-        const errorData = await response.data; // Try to get error details from the server
-        throw new Error(
-          `Error deleting task: ${response.status} - ${
-            errorData?.message || response.statusText
-          }`
-        );
-      }
-
       console.log(response.data); // Log the response data
 
       setTasks((prevTasks) => prevTasks.filter((task) => task._id !== id));
@@ -179,15 +163,6 @@ function TodoList({ setIsLoggedIn }) {
   const editTask = async (id, newText) => {
     try {
       const response = await api.put(`/todos/${id}`, { text: newText });
-
-      if (response.status !== 200) {
-        const errorData = await response.data; // Try to get error details from the server
-        throw new Error(
-          `HTTP error! status : ${response.status} message: ${
-            errorData?.message || response.statusText
-          }`
-        );
-      }
 
       const updatedTask = response.data;
 
@@ -272,8 +247,12 @@ function TodoList({ setIsLoggedIn }) {
         />
         <div className="button-container">
           {" "}
-          <button className="add-todo-button" onClick={addTask}>
-            Add ToDo
+          <button
+            className="add-todo-button"
+            onClick={addTask}
+            disabled={loading}
+          >
+            {loading ? "Adding..." : "Add ToDo"}
           </button>
           <button className="clear-completed-button" onClick={clearCompleted}>
             Clear Completed ToDo
