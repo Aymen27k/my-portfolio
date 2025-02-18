@@ -10,6 +10,7 @@ import Signup from "./Signup.jsx";
 import ForgotPassword from "./ForgotPassword.jsx";
 import Login from "./Login.jsx";
 import ISSLocation from "./IssLocation.jsx";
+import ResetPassword from "./ResetPassword.jsx";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useEffect, useState } from "react";
 import api from "./apiClient.js";
@@ -40,6 +41,7 @@ const App = () => {
           />
           <Route path="/Signup" element={<Signup />} />
           <Route path="/ForgotPassword" element={<ForgotPassword />} />
+          <Route path="/ResetPassword/:token" element={<ResetPassword />} />
           <Route path="/ISSLocation" element={<ISSLocation />} />
         </Routes>
       </Router>

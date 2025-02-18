@@ -209,7 +209,7 @@ app.post("/users/forgot-password", async (req, res) => {
       from: "noreply@example.com",
       to: user.email,
       subject: "Password Reset",
-      html: `<p>Click <a href="https://yourwebsite.com/reset-password?token=${token}">here</a> to reset your password.</p>`,
+      html: `<p>Click <a href="http://localhost:5173/ResetPassword/${token}">here</a> to reset your password.</p>`,
     };
     await transporter.sendMail(mailOptions);
 
@@ -217,6 +217,32 @@ app.post("/users/forgot-password", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Something went wrong" });
+  }
+});
+app.post("/users/reset-password", async (req, res) => {
+  const { token, password } = req.body;
+  try {
+    const user = await User.findOne({
+      PasswordResetToken: token,
+      resetPasswordExpiresAt: { $gt: Date.now() },
+    });
+    if (!user) {
+      user.resetPasswordToken = undefined;
+      user.resetPasswordExpires = undefined;
+      await user.save();
+      return res.status(400).json({ message: "Invalid or Expired Token" });
+    }
+    const hashedPassword = await bcrypt.hash(password, 10);
+    user.password = hashedPassword;
+    user.PasswordResetToken = undefined;
+    user.resetPasswordExpiresAt = undefined;
+    await user.save();
+    res.json({ message: "Password reset successful" });
+  } catch (error) {
+    console.error("Error:", error);
+    res
+      .status(500)
+      .json({ message: "An error occurred. Please try again later." });
   }
 });
 app.listen(port, () => {
