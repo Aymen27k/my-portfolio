@@ -1,9 +1,4 @@
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  useNavigate,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./Components/Navbar/Navbar";
 import NotFoundPage from "./NotFoundPage.jsx";
 import Contact from "./contact.jsx";
@@ -12,8 +7,10 @@ import Home from "./Home.jsx";
 import Books from "./books.jsx";
 import TodoList from "./TodoList.jsx";
 import Signup from "./Signup.jsx";
+import ForgotPassword from "./ForgotPassword.jsx";
 import Login from "./Login.jsx";
 import ISSLocation from "./IssLocation.jsx";
+import ResetPassword from "./ResetPassword.jsx";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useEffect, useState } from "react";
 import api from "./apiClient.js";
@@ -43,6 +40,8 @@ const App = () => {
             }
           />
           <Route path="/Signup" element={<Signup />} />
+          <Route path="/ForgotPassword" element={<ForgotPassword />} />
+          <Route path="/ResetPassword/:token" element={<ResetPassword />} />
           <Route path="/ISSLocation" element={<ISSLocation />} />
         </Routes>
       </Router>
