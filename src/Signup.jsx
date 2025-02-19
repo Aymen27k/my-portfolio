@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import PropTypes from "prop-types";
 import { Link, useNavigate } from "react-router-dom";
+import { LoadingContext } from "./LoadingContext.jsx";
+import LoadingSpinner from "./LoadingSpinner.jsx";
 
 function Signup({ onSignup }) {
   const [username, setUsername] = useState("");
@@ -8,6 +10,7 @@ function Signup({ onSignup }) {
   const [password, setPassword] = useState("");
   const [showAlert, setShowAlert] = useState(false);
   const [signupError, setSignupError] = useState(null);
+  const { isLoading, setLoading } = useContext(LoadingContext);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -18,7 +21,7 @@ function Signup({ onSignup }) {
       setSignupError("Please enter all fields.");
       return;
     }
-
+    setLoading(true);
     try {
       const response = await fetch("/users/signup", {
         method: "POST",
@@ -41,6 +44,8 @@ function Signup({ onSignup }) {
     } catch (error) {
       console.error("Signup error:", error);
       setSignupError(error.message);
+    } finally {
+      setLoading(false);
     }
   };
   return (
@@ -48,6 +53,7 @@ function Signup({ onSignup }) {
       <div className="form_container p-5 rounded bg-white">
         <form onSubmit={handleSubmit}>
           <h3>Sign Up</h3>
+          {isLoading && <LoadingSpinner />}
           {showAlert && (
             <div className="alert alert-success" role="alert">
               <h4 className="alert-heading">Welcome!</h4>

@@ -12,8 +12,7 @@ import Login from "./Login.jsx";
 import ISSLocation from "./IssLocation.jsx";
 import ResetPassword from "./ResetPassword.jsx";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useEffect, useState } from "react";
-import api from "./apiClient.js";
+import { useState } from "react";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(

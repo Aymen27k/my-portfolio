@@ -1,13 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
 import api from "./apiClient.js";
+import { LoadingContext } from "./LoadingContext.jsx";
+import LoadingSpinner from "./LoadingSpinner.jsx";
 
 function TodoList({ setIsLoggedIn }) {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState("");
-  const [selectedTasks, setSelectedTasks] = useState([]);
-  const [loading, setLoading] = useState(true);
-  //const [error, setError] = useState(null);
+  const { isLoading, setLoading } = useContext(LoadingContext);
   const [username, setUsername] = useState(null);
   const loggedInUserId = localStorage.getItem("userId");
 
@@ -18,7 +18,7 @@ function TodoList({ setIsLoggedIn }) {
       setUsername(storedUsername);
     }
   }, []);
-
+  /*
   function Tooltip({ text, icon }) {
     const [isTooltipVisible, setIsTooltipVisible] = useState(false);
     return (
@@ -32,7 +32,7 @@ function TodoList({ setIsLoggedIn }) {
       </div>
     );
   }
-
+*/
   /** function to getTasks from the DB, Get the Specific user's List using his ID*/
   async function getTasks() {
     const userId = localStorage.getItem("userId");
@@ -121,6 +121,7 @@ function TodoList({ setIsLoggedIn }) {
   };
   //Function that Clear all the selected Items
   const clearCompleted = async () => {
+    setLoading(true);
     const selectedCount = getSelectedTaskCount();
     try {
       if (selectedCount > 0) {
@@ -142,6 +143,8 @@ function TodoList({ setIsLoggedIn }) {
     } catch (error) {
       console.error("Error deleting completed tasks:", error);
       alert(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -161,6 +164,7 @@ function TodoList({ setIsLoggedIn }) {
 
   //Function to Edit TASKS
   const editTask = async (id, newText) => {
+    setLoading(true);
     try {
       const response = await api.put(`/todos/${id}`, { text: newText });
 
@@ -172,10 +176,13 @@ function TodoList({ setIsLoggedIn }) {
     } catch (error) {
       console.error("Error modifying a Task", error);
       alert(error.message); // Display the error message to the user
+    } finally {
+      setLoading(false);
     }
   };
   /**Logout Function and Clearing LocalStorage */
   const handleLogout = async () => {
+    setLoading(true);
     try {
       const userId = localStorage.getItem("userId");
       const response = await api.post("/users/logout", { userId });
@@ -191,6 +198,8 @@ function TodoList({ setIsLoggedIn }) {
       }
     } catch (error) {
       console.error("Logout error:", error);
+    } finally {
+      setLoading(false);
     }
   };
   return (
@@ -198,9 +207,10 @@ function TodoList({ setIsLoggedIn }) {
       <header>
         <h1>{username ? `Hello, ${username}!` : "Welcome!"}</h1>
       </header>
+      {isLoading && <LoadingSpinner />}
       <main>
         <ul className="task-list">
-          {tasks.length === 0 && "No Tasks available"}
+          {!isLoading && tasks.length === 0 && "No Tasks available"}
 
           {tasks.map((task) => (
             <li
@@ -250,15 +260,15 @@ function TodoList({ setIsLoggedIn }) {
           <button
             className="add-todo-button"
             onClick={addTask}
-            disabled={loading}
+            disabled={isLoading}
           >
-            {loading ? "Adding..." : "Add ToDo"}
+            {isLoading ? "Adding..." : "Add ToDo"}
           </button>
           <button className="clear-completed-button" onClick={clearCompleted}>
             Clear Completed ToDo
           </button>
         </div>
-        <div className="tooltip">
+        {/*<div className="tooltip">
           <Tooltip
             text="Double click on a task to modify it"
             icon={
@@ -267,7 +277,7 @@ function TodoList({ setIsLoggedIn }) {
               </span>
             }
           />
-        </div>
+        </div>*/}
         <button type="button" className="btn btn-dark" onClick={handleLogout}>
           Log out
         </button>

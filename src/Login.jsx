@@ -1,18 +1,20 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import { useNavigate } from "react-router-dom";
+import { LoadingContext } from "./LoadingContext.jsx";
+import LoadingSpinner from "./LoadingSpinner.jsx";
 
 function Login({ setIsLoggedIn }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   //const [rememberme, setRememeberme] = useState(false);
   const [loginError, setLoginError] = useState(false);
-  const navigate = useNavigate();
+  const { isLoading, setLoading } = useContext(LoadingContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoginError(null);
+    setLoading(true);
     try {
       const response = await fetch("/users/login", {
         method: "POST",
@@ -33,6 +35,8 @@ function Login({ setIsLoggedIn }) {
     } catch (error) {
       console.error("Login error", error);
       setLoginError(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -41,6 +45,7 @@ function Login({ setIsLoggedIn }) {
       <div className="form_container p-5 rounded bg-white">
         <form onSubmit={handleSubmit}>
           <h3>Sign in</h3>
+          {isLoading && <LoadingSpinner />}
           {loginError && <div className="error-message">{loginError}</div>}
           <div className="mb-2">
             <label htmlFor="email">Email</label>

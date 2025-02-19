@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const Todo = require("./models/Todo");
 const connectDB = require("./models/connectDB");
 const authMiddleware = require("./authMiddleware");
+const User = require("./models/Users");
 const app = express();
 const port = 3000;
 
@@ -30,6 +31,7 @@ app.post("/todos", authMiddleware, async (req, res) => {
     const { text, userId } = req.body;
     const existingTodo = await Todo.findOne({
       text: { $regex: new RegExp(`^${text}$`, "i") },
+      userId: User._id,
     });
     if (existingTodo) {
       return res.status(400).json({ message: "Task already exists!" });
