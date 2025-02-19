@@ -7,9 +7,7 @@ import LoadingSpinner from "./LoadingSpinner.jsx";
 function TodoList({ setIsLoggedIn }) {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState("");
-  const [selectedTasks, setSelectedTasks] = useState([]);
   const { isLoading, setLoading } = useContext(LoadingContext);
-  //const [error, setError] = useState(null);
   const [username, setUsername] = useState(null);
   const loggedInUserId = localStorage.getItem("userId");
 
