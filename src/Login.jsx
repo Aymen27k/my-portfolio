@@ -1,11 +1,12 @@
 import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 import PropTypes from "prop-types";
 import { LoadingContext } from "./LoadingContext.jsx";
 import LoadingSpinner from "./LoadingSpinner.jsx";
 
 function Login({ setIsLoggedIn }) {
-  const [email, setEmail] = useState("");
+  const [userLogin, setUserLogin] = useState("");
   const [password, setPassword] = useState("");
   //const [rememberme, setRememeberme] = useState(false);
   const [loginError, setLoginError] = useState(false);
@@ -16,25 +17,31 @@ function Login({ setIsLoggedIn }) {
     setLoginError(null);
     setLoading(true);
     try {
-      const response = await fetch("/users/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
+      const response = await axios.post("/users/login", {
+        userLogin,
+        password,
       });
-      if (!response.ok) {
-        const errorText = await response.json();
-        throw new Error(errorText || "login failed");
-      }
-      const data = await response.json();
+      const data = response.data; // Access the data from response.data
+
       localStorage.setItem("userId", data.User._id);
       localStorage.setItem("username", data.User.username);
       localStorage.setItem("accessToken", data.accessToken);
       setIsLoggedIn(true);
     } catch (error) {
       console.error("Login error", error);
-      setLoginError(error.message);
+
+      if (error.response) {
+        // Check if the error has a response (from the server)
+        const errorMessage = error.response.data.message || "Login failed"; // Extract the error message
+        setLoginError(errorMessage); // Set the error message for display
+        console.error("Server Error Details:", error.response.data); // Log detailed server error for debugging
+      } else if (error.request) {
+        // The request was made but no response was received
+        setLoginError("No response from the server.");
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        setLoginError("An error occurred while setting up the request.");
+      }
     } finally {
       setLoading(false);
     }
@@ -48,14 +55,14 @@ function Login({ setIsLoggedIn }) {
           {isLoading && <LoadingSpinner />}
           {loginError && <div className="error-message">{loginError}</div>}
           <div className="mb-2">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email">Email or Username</label>
             <input
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={userLogin}
+              onChange={(e) => setUserLogin(e.target.value)}
               required
               id="email"
-              type="email"
-              placeholder="Enter Your Email"
+              type="text"
+              placeholder="Enter Your Email or Username"
               className="form-control"
             />
           </div>

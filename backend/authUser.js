@@ -37,9 +37,20 @@ app.post("/users/signup", async (req, res) => {
   try {
     const { username, email, password } = req.body;
     //Verify if user 'Email' already exists
-    const existingUser = await User.findOne({ email });
+    const existingMail = await User.findOne({ email });
+    if (existingMail) {
+      return res
+        .status(400)
+        .json({ message: "User with this E-mail already exists" });
+    }
+    //Verify if user 'UserName' already exists
+    const existingUser = await User.findOne({
+      username: { $regex: new RegExp(`^${username.trim()}$`, "i") },
+    });
     if (existingUser) {
-      return res.status(400).send("User with this E-mail already exists");
+      return res
+        .status(400)
+        .json({ message: "Username already exists. Try a different one" });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({ username, email, password: hashedPassword });
@@ -56,10 +67,21 @@ app.post("/users/signup", async (req, res) => {
  */
 app.post("/users/login", async (req, res) => {
   try {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email }); //Find the user by EMAIL
+    const { userLogin, password } = req.body;
+    let user;
+    user = await User.findOne({
+      email: { $regex: new RegExp(`^${userLogin.trim()}$`, "i") },
+    }); //Find the user by EMAIL
+
     if (!user) {
-      return res.status(400).json("User not found");
+      user = await User.findOne({
+        // If not found by email, try by username
+        username: { $regex: new RegExp(`^${userLogin.trim()}$`, "i") },
+      });
+    }
+    if (!user) {
+      // In case USER is not Found
+      return res.status(401).json({ message: "Invalid credentials" });
     }
     const isMatch = await bcrypt.compare(password, user.password); //Compare Passwords
     if (isMatch) {
@@ -80,7 +102,7 @@ app.post("/users/login", async (req, res) => {
       });
       await user.save();
     } else {
-      res.status(400).json("Invalid credentials");
+      res.status(401).json({ message: "Invalid credentials" });
     }
   } catch (error) {
     console.error("Error during login: ", error);

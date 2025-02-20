@@ -189,7 +189,7 @@ span{
 .form-links {
   text-align: right;
 }
-.form_container input[type="email"],
+.form_container input[type="text"],
 .form_container input[type="password"] {
     width: calc(100% - 20px);
     padding: 10px;
