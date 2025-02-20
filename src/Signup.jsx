@@ -1,6 +1,7 @@
 import { useState, useContext } from "react";
 import PropTypes from "prop-types";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import { LoadingContext } from "./LoadingContext.jsx";
 import LoadingSpinner from "./LoadingSpinner.jsx";
 
@@ -23,27 +24,30 @@ function Signup({ onSignup }) {
     }
     setLoading(true);
     try {
-      const response = await fetch("/users/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, email, password }),
+      const response = await axios.post("/users/signup", {
+        username,
+        email,
+        password,
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Signup failed");
-      }
       setShowAlert(true);
       setTimeout(() => {
         navigate("/TodoList");
       }, 2500);
-      const data = await response.json();
-      onSignup(data); // Call the onSignup callback, passing the data if needed
+
+      const data = response.data; // Access data with response.data
+      onSignup(data); // Call the onSignup callback
     } catch (error) {
       console.error("Signup error:", error);
-      setSignupError(error.message);
+
+      if (error.response) {
+        // Check if the server returned an error response
+        const errorMessage = error.response.data.message || "Signup failed";
+        setSignupError(errorMessage);
+      } else if (error.request) {
+        // Check if a request was made but no response was received
+        setSignupError("No response from the server.");
+      }
     } finally {
       setLoading(false);
     }
@@ -54,6 +58,7 @@ function Signup({ onSignup }) {
         <form onSubmit={handleSubmit}>
           <h3>Sign Up</h3>
           {isLoading && <LoadingSpinner />}
+          {signupError && <div className="error-message">{signupError}</div>}
           {showAlert && (
             <div className="alert alert-success" role="alert">
               <h4 className="alert-heading">Welcome!</h4>
@@ -68,7 +73,7 @@ function Signup({ onSignup }) {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
-              placeholder="Enter Your Name"
+              placeholder="Enter Your UserName"
               className="form-control"
             />
           </div>
