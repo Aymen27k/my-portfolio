@@ -78,6 +78,10 @@ app.put("/todos/:id", authMiddleware, async (req, res) => {
   try {
     const taskId = req.params.id;
     const updatedTextFromRequest = req.body.text;
+    //Checking if the New Text Is empty
+    if (updatedTextFromRequest.trim() === "") {
+      return;
+    }
     const objectId = new mongoose.Types.ObjectId(taskId);
     const updatedTodo = await Todo.findByIdAndUpdate(
       objectId,

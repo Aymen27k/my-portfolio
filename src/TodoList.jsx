@@ -165,6 +165,19 @@ function TodoList({ setIsLoggedIn }) {
   //Function to Edit TASKS
   const editTask = async (id, newText) => {
     setLoading(true);
+    if (newText === "") {
+      const confirmDelete = confirm(
+        "The task can't be empty. Would you like to delete the task instead?"
+      );
+      if (confirmDelete) {
+        deleteTask(id);
+        setLoading(false);
+        alert("Task Deleted!");
+      } else {
+        setLoading(false);
+        return;
+      }
+    }
     try {
       const response = await api.put(`/todos/${id}`, { text: newText });
 
