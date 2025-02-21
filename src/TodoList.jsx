@@ -18,21 +18,6 @@ function TodoList({ setIsLoggedIn }) {
       setUsername(storedUsername);
     }
   }, []);
-  /*
-  function Tooltip({ text, icon }) {
-    const [isTooltipVisible, setIsTooltipVisible] = useState(false);
-    return (
-      <div
-        className="tooltip-container"
-        onMouseEnter={() => setIsTooltipVisible(true)}
-        onMouseLeave={() => setIsTooltipVisible(false)}
-      >
-        <span className="icon">{icon}</span>
-        {isTooltipVisible && <span className="tooltip-text">{text}</span>}
-      </div>
-    );
-  }
-*/
   /** function to getTasks from the DB, Get the Specific user's List using his ID*/
   async function getTasks() {
     const userId = localStorage.getItem("userId");
@@ -64,7 +49,11 @@ function TodoList({ setIsLoggedIn }) {
   //Function that add tasks
   async function addTask() {
     setLoading(true);
-    const newText = { text: newTask, completed: false, userId: loggedInUserId };
+    const newText = {
+      text: newTask,
+      completed: false,
+      userId: loggedInUserId,
+    };
     if (newTask.trim() === "") {
       setLoading(false);
       return;
@@ -165,7 +154,7 @@ function TodoList({ setIsLoggedIn }) {
   //Function to Edit TASKS
   const editTask = async (id, newText) => {
     setLoading(true);
-    if (newText === "") {
+    if (newText.trim() === "") {
       const confirmDelete = confirm(
         "The task can't be empty. Would you like to delete the task instead?"
       );
@@ -227,6 +216,7 @@ function TodoList({ setIsLoggedIn }) {
 
           {tasks.map((task) => (
             <li
+              title="Double-click to edit"
               key={task._id}
               className={`task-item ${task.completed ? "completed" : ""}`}
             >
@@ -281,16 +271,6 @@ function TodoList({ setIsLoggedIn }) {
             Clear Completed ToDo
           </button>
         </div>
-        {/*<div className="tooltip">
-          <Tooltip
-            text="Double click on a task to modify it"
-            icon={
-              <span role="img" aria-label="Lightbulb">
-                💡
-              </span>
-            }
-          />
-        </div>*/}
         <button type="button" className="btn btn-dark" onClick={handleLogout}>
           Log out
         </button>
