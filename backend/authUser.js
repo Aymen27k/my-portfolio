@@ -63,7 +63,7 @@ app.post("/users/signup", async (req, res) => {
 });
 /**
  * Handles user login. Authenticates the user based on email and password.
- * Returns an access token and refresh token upon successful authentication.
+ * Returns an access token upon successful authentication.
  */
 app.post("/users/login", async (req, res) => {
   try {

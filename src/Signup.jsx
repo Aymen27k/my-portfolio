@@ -71,7 +71,7 @@ function Signup({ onSignup }) {
               type="text"
               id="uname"
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={(e) => setUsername(e.target.value.trim())}
               required
               placeholder="Enter Your UserName"
               className="form-control"
@@ -83,7 +83,7 @@ function Signup({ onSignup }) {
               type="email"
               id="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value.trim())}
               required
               placeholder="Enter Your Email"
               className="form-control"
@@ -95,7 +95,7 @@ function Signup({ onSignup }) {
               type="password"
               id="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value.trim())}
               required
               placeholder="Enter Your Password"
               className="form-control"

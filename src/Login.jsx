@@ -58,7 +58,7 @@ function Login({ setIsLoggedIn }) {
             <label htmlFor="email">Email or Username</label>
             <input
               value={userLogin}
-              onChange={(e) => setUserLogin(e.target.value)}
+              onChange={(e) => setUserLogin(e.target.value.trim())}
               required
               id="email"
               type="text"
@@ -71,7 +71,7 @@ function Login({ setIsLoggedIn }) {
             <input
               type="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value.trim())}
               required
               id="password"
               placeholder="Enter Your Password"
