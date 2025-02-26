@@ -214,3 +214,20 @@ span{
   75% { transform: translateX(-5px); }
   100% { transform: translateX(0); }
 }
+.gear-icon {
+  cursor: pointer;
+  margin-left: 10px;
+  height: 40px;
+  width: 40px;
+}
+.app-container .dropdown-menu {
+  position: absolute;
+  display: block;
+  padding: 10px; 
+  top: 50px; /* Adjust as needed */
+  right: 20px; /* Adjust as needed */
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  z-index: 10;
+}

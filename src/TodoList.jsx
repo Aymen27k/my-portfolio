@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from "react";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import api from "./apiClient.js";
 import { LoadingContext } from "./LoadingContext.jsx";
@@ -7,6 +8,7 @@ import LoadingSpinner from "./LoadingSpinner.jsx";
 function TodoList({ setIsLoggedIn }) {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState("");
+  const [dropdownVisible, setDropdownVisible] = useState(false);
   const { isLoading, setLoading } = useContext(LoadingContext);
   const [username, setUsername] = useState(null);
   const loggedInUserId = localStorage.getItem("userId");
@@ -32,6 +34,11 @@ function TodoList({ setIsLoggedIn }) {
       setLoading(false);
     }
   }
+  //Gear icon visibility
+  const toggleDropdown = () => {
+    console.log("toggleDropdown called!", dropdownVisible);
+    setDropdownVisible(!dropdownVisible);
+  };
   //Async function to display the Data in my list
   useEffect(() => {
     async function fetchTasks() {
@@ -46,6 +53,7 @@ function TodoList({ setIsLoggedIn }) {
     }
     fetchTasks();
   }, []);
+
   //Function that add tasks
   async function addTask() {
     setLoading(true);
@@ -207,7 +215,17 @@ function TodoList({ setIsLoggedIn }) {
   return (
     <div className="app-container">
       <header>
-        <h1>{username ? `Hello, ${username}!` : "Welcome!"}</h1>
+        <div>
+          <h1>
+            {username ? `Hello, ${username}!` : "Welcome!"}
+            <img
+              src="public\gear.png"
+              alt="Settings"
+              onClick={toggleDropdown}
+              className="gear-icon"
+            />
+          </h1>
+        </div>
       </header>
       {isLoading && <LoadingSpinner />}
       <main>
@@ -271,9 +289,21 @@ function TodoList({ setIsLoggedIn }) {
             Clear Completed ToDo
           </button>
         </div>
-        <button type="button" className="btn btn-dark" onClick={handleLogout}>
-          Log out
-        </button>
+        {dropdownVisible && (
+          <div className="dropdown-menu">
+            {" "}
+            <button
+              type="button"
+              className="btn btn-dark"
+              onClick={handleLogout}
+            >
+              Log out
+            </button>
+            <Link to="/ChangePassword" className="ms-2">
+              Change Password
+            </Link>
+          </div>
+        )}
       </main>
     </div>
   );
