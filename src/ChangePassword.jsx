@@ -70,9 +70,9 @@ function ChangePassword() {
             <button className="btn btn-primary">Confirm</button>
           </div>
           <p className="form-links mt-2">
-            Already registerd ?
+            Go back ?
             <Link to="/TodoList" className="ms-2">
-              Sign in
+              To Do List
             </Link>
           </p>
         </form>

@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import api from "./apiClient.js";
 import { LoadingContext } from "./LoadingContext.jsx";
@@ -12,6 +12,7 @@ function TodoList({ setIsLoggedIn }) {
   const { isLoading, setLoading } = useContext(LoadingContext);
   const [username, setUsername] = useState(null);
   const loggedInUserId = localStorage.getItem("userId");
+  const navigate = useNavigate();
 
   //Getting the name of the USER to display it as a Header
   useEffect(() => {
@@ -53,7 +54,10 @@ function TodoList({ setIsLoggedIn }) {
     }
     fetchTasks();
   }, []);
-
+  //Button Change Password Navigator
+  const handlePasswordChange = () => {
+    navigate("/ChangePassword");
+  };
   //Function that add tasks
   async function addTask() {
     setLoading(true);
@@ -202,7 +206,7 @@ function TodoList({ setIsLoggedIn }) {
         localStorage.removeItem("userId"); // Remove userId
         localStorage.removeItem("items"); //remove Tasks list
         setIsLoggedIn(false);
-        navigate("/Login");
+        navigate("/TodoList");
       } else {
         console.error("Logout failed:", response.data.message);
       }
@@ -298,10 +302,14 @@ function TodoList({ setIsLoggedIn }) {
               onClick={handleLogout}
             >
               Log out
+              <img src="public\logout.png" className="logout-icon"></img>
             </button>
-            <Link to="/ChangePassword" className="ms-2">
+            <button
+              onClick={handlePasswordChange}
+              className="btn btn-outline-primary ms-2"
+            >
               Change Password
-            </Link>
+            </button>
           </div>
         )}
       </main>
