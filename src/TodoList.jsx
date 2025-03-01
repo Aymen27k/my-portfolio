@@ -37,7 +37,6 @@ function TodoList({ setIsLoggedIn }) {
   }
   //Gear icon visibility
   const toggleDropdown = () => {
-    console.log("toggleDropdown called!", dropdownVisible);
     setDropdownVisible(!dropdownVisible);
   };
   //Async function to display the Data in my list
@@ -219,16 +218,35 @@ function TodoList({ setIsLoggedIn }) {
   return (
     <div className="app-container">
       <header>
-        <div>
-          <h1>
-            {username ? `Hello, ${username}!` : "Welcome!"}
+        <div className="header-container">
+          <h1>{username ? `Hello, ${username}!` : "Welcome!"}</h1>
+          <div className="gear-dropdown-container">
             <img
-              src="public\gear.png"
+              src="\gear.png"
               alt="Settings"
               onClick={toggleDropdown}
               className="gear-icon"
             />
-          </h1>
+            {dropdownVisible && (
+              <div className="dropdown-menu">
+                {" "}
+                <button
+                  type="button"
+                  className="btn btn-dark"
+                  onClick={handleLogout}
+                >
+                  Log out
+                  <img src="\logout.png" className="logout-icon"></img>
+                </button>
+                <button
+                  onClick={handlePasswordChange}
+                  className="btn btn-outline-primary ms-2"
+                >
+                  Change Password
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </header>
       {isLoading && <LoadingSpinner />}
@@ -293,25 +311,6 @@ function TodoList({ setIsLoggedIn }) {
             Clear Completed ToDo
           </button>
         </div>
-        {dropdownVisible && (
-          <div className="dropdown-menu">
-            {" "}
-            <button
-              type="button"
-              className="btn btn-dark"
-              onClick={handleLogout}
-            >
-              Log out
-              <img src="public\logout.png" className="logout-icon"></img>
-            </button>
-            <button
-              onClick={handlePasswordChange}
-              className="btn btn-outline-primary ms-2"
-            >
-              Change Password
-            </button>
-          </div>
-        )}
       </main>
     </div>
   );

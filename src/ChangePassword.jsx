@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "./apiClient.js";
 import { LoadingContext } from "./LoadingContext.jsx";
 import LoadingSpinner from "./LoadingSpinner.jsx";
 
@@ -16,6 +16,39 @@ function ChangePassword() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErroMessage(null);
+    if (!oldPassword || !newPassword || !confirmPassword) {
+      setErroMessage("Please enter all fields.");
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setErroMessage("New passwords do not match.");
+      return;
+    }
+    setLoading(true);
+    setErroMessage("");
+    try {
+      const token = localStorage.getItem("accessToken");
+      const userId = localStorage.getItem("userId");
+      const response = await api.post(
+        "/users/password",
+        { userId, oldPassword, newPassword },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setShowAlert(true);
+      setOldPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+    } catch (error) {
+      if (error.response) {
+        setErroMessage(error.response.data.message);
+      } else {
+        setErroMessage("An unexpected error occurred.");
+      }
+    } finally {
+      setLoading(false);
+    }
   };
   return (
     <div className="signup template d-flex justify-content-center align-items-center">

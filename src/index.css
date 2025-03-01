@@ -225,8 +225,8 @@ span{
   position: absolute;
   display: block;
   padding: 10px; 
-  top: 26.3%; /* Adjust as needed */
-  right: 24.6%; /* Adjust as needed */
+  top: -0.7rem; /* Adjust as needed */
+  right: -20.3rem; /* Adjust as needed */
   background-color: white;
   border: 1px solid #ccc;
   padding: 10px;
@@ -251,4 +251,11 @@ span{
 .logout-icon{
   width: 24px; 
   height: 24px;
+}
+.gear-dropdown-container {
+  position: relative;
+}
+.header-container { /* Replace with your actual class name */
+  display: flex;
+  align-items: center;
 }
