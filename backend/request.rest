@@ -18,7 +18,7 @@ Content-Type: application/json
 
 {
     "userLogin" : "Aymen27k@gmail.com",
-    "password" : "myPassword"
+    "password" : "mosaique"
 }
 
 ###
@@ -39,7 +39,7 @@ Content-Type: application/json
 
 ###
 POST http://localhost:4000/users/logout
-authorization : bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3NDA1NzM1NzIsImV4cCI6MTc0MDU3NDQ3Mn0.RQFZx0yQTCVgd1O8O8hl6PWcMwuXjibv7ls7OOke-pQ
+authorization : bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3NDEwMTg3MDcsImV4cCI6MTc0MTAxOTYwN30.S-Le3LCnV46ufv8XVpNnNM0D44wABNR-TGyzM5j4Y5w
 
 ###
 
@@ -53,10 +53,10 @@ Content-Type: application/json
 ###
 POST http://localhost:4000/users/password
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3NDA1NzQ0MDYsImV4cCI6MTc0MDU3NTMwNn0.ovTTERrTOTHXE5N-jG-dngKdOltRU48kuiwr1l6MCqw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3NDEwMTg3MDcsImV4cCI6MTc0MTAxOTYwN30.S-Le3LCnV46ufv8XVpNnNM0D44wABNR-TGyzM5j4Y5w
 
 {
-  "userId" : "67963fea34be97aaec5b7ea",
-  "oldPassword": "mosaique",
-  "newPassword": "myPassword"
+  "userId" : "67963fea34be97aaec5b70ea",
+  "oldPassword": "myPassword",
+  "newPassword": "mosaique"
 }

@@ -80,7 +80,7 @@ app.post("/users/login", async (req, res) => {
       const refreshToken = jwt.sign(
         { userId: User._id, email: User.email },
         process.env.REFRESH_TOKEN_SECRET,
-        { expiresIn: "1d" }
+        { expiresIn: "7d" }
       );
       user.refreshToken = refreshToken;
       res.json({
@@ -110,14 +110,15 @@ app.post("/users/password", authMiddleware, async (req, res) => {
 
     const passwordMatch = await bcrypt.compare(oldPassword, user.password);
     if (!passwordMatch) {
-      return res.status(401).json({ message: "Incorrect old password" });
+      return res.status(400).json({ message: "Incorrect old password" });
     }
     const hashedNewPassword = await bcrypt.hash(newPassword, 10);
     user.password = hashedNewPassword;
     await user.save();
     res.status(200).json({ message: "Password updated successfully" });
+    return;
   } catch (error) {
-    console.error("Error changing the password :", error);
+    console.error("Error changing the password:", error);
     res.status(500).json({ message: "Error changing the password" });
   }
 });
@@ -200,7 +201,7 @@ app.post("/users/refresh_token", async (req, res) => {
         const newRefreshToken = jwt.sign(
           { userId: User._id },
           process.env.REFRESH_TOKEN_SECRET,
-          { expiresIn: "1d" }
+          { expiresIn: "7d" }
         );
 
         // Update user's refresh token in the database (for rotation)

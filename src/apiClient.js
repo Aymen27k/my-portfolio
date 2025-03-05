@@ -25,13 +25,13 @@ api.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        // 1. Get the refresh token from the database (you'll need to implement this)
+        // 1. Get the refresh token from the database
         const refreshToken = await getRefreshTokenFromDatabase(req.user.id); // req.user.id from the access token
 
         if (!refreshToken) {
           // Handle the case where the refresh token is not found (e.g., logout)
           localStorage.removeItem("accessToken");
-          window.location = "/login"; // Or redirect as needed
+          window.location = "/TodoList"; // Or redirect as needed
           return Promise.reject(new Error("Refresh token not found"));
         }
 
@@ -54,7 +54,7 @@ api.interceptors.response.use(
       } catch (refreshError) {
         // Handle refresh token error (e.g., logout the user)
         localStorage.removeItem("accessToken");
-        window.location = "/login"; // Or redirect as needed
+        window.location = "/TodoList"; // Or redirect as needed
         return Promise.reject(refreshError);
       }
     } else if (error.response.status === 403 && !originalRequest._retry) {
@@ -69,7 +69,7 @@ api.interceptors.response.use(
           if (!refreshToken) {
             // Handle the case where the refresh token is not found (e.g., logout)
             localStorage.removeItem("accessToken");
-            window.location = "/login"; // Or redirect as needed
+            window.location = "/TodoList"; // Or redirect as needed
             return Promise.reject(new Error("Refresh token not found"));
           }
           const refreshResponse = await axios.post("/users/refresh_token", {

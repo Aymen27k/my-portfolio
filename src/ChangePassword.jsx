@@ -9,23 +9,23 @@ function ChangePassword() {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showAlert, setShowAlert] = useState(false);
-  const [erroMessage, setErroMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
   const { isLoading, setLoading } = useContext(LoadingContext);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErroMessage(null);
+    setErrorMessage(null);
     if (!oldPassword || !newPassword || !confirmPassword) {
-      setErroMessage("Please enter all fields.");
+      setErrorMessage("Please enter all fields.");
       return;
     }
     if (newPassword !== confirmPassword) {
-      setErroMessage("New passwords do not match.");
+      setErrorMessage("New passwords do not match.");
       return;
     }
     setLoading(true);
-    setErroMessage("");
+    setErrorMessage("");
     try {
       const token = localStorage.getItem("accessToken");
       const userId = localStorage.getItem("userId");
@@ -40,11 +40,25 @@ function ChangePassword() {
       setOldPassword("");
       setNewPassword("");
       setConfirmPassword("");
+      setTimeout(() => {
+        navigate("/TodoList");
+      }, 2500);
     } catch (error) {
       if (error.response) {
-        setErroMessage(error.response.data.message);
+        // Server responded with a status code outside the 2xx range
+        setErrorMessage(error.response.data.message);
+      } else if (error.request) {
+        // Request was made but no response was received
+        setErrorMessage("Network error. Please check your connection.");
+        console.error("Network error:", error); // Log the original error
+      } else if (error instanceof TypeError) {
+        // Handle TypeError (e.g., syntax error)
+        setErrorMessage("A technical error occurred.");
+        console.error("TypeError:", error);
       } else {
-        setErroMessage("An unexpected error occurred.");
+        // Something happened in setting up the request that triggered an Error
+        setErrorMessage("An unexpected error occurred.");
+        console.error("Unexpected error:", error);
       }
     } finally {
       setLoading(false);
@@ -56,7 +70,7 @@ function ChangePassword() {
         <form onSubmit={handleSubmit}>
           <h3>Change password</h3>
           {isLoading && <LoadingSpinner />}
-          {erroMessage && <div className="error-message">{erroMessage}</div>}
+          {errorMessage && <div className="error-message">{errorMessage}</div>}
           {showAlert && (
             <div className="alert alert-success" role="alert">
               <h4 className="alert-heading">Done !</h4>
