@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { LoadingContext } from "./LoadingContext.jsx";
 import LoadingSpinner from "./LoadingSpinner.jsx";
+import usePasswordToggle from "./Components/usePasswordToggle.jsx";
 
 function Signup({ onSignup }) {
   const [username, setUsername] = useState("");
@@ -12,6 +13,8 @@ function Signup({ onSignup }) {
   const [showAlert, setShowAlert] = useState(false);
   const [signupError, setSignupError] = useState(null);
   const { isLoading, setLoading } = useContext(LoadingContext);
+  const [passwordInputType, toggleIcon, togglePasswordVisibility] =
+    usePasswordToggle();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -92,7 +95,7 @@ function Signup({ onSignup }) {
           <div className="mb-2">
             <label htmlFor="password">Password</label>
             <input
-              type="password"
+              type={passwordInputType}
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value.trim())}
@@ -100,6 +103,12 @@ function Signup({ onSignup }) {
               placeholder="Enter Your Password"
               className="form-control"
             />
+            <span
+              className="password-toogle-icon-signup"
+              onClick={togglePasswordVisibility}
+            >
+              {toggleIcon}
+            </span>
           </div>
           <div className="d-grid">
             <button className="btn btn-primary">Sign Up</button>

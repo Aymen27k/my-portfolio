@@ -259,3 +259,38 @@ span{
   display: flex;
   align-items: center;
 }
+.password-field{
+  position: relative;
+}
+.form_container .password-toogle-icon{
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translate(-100%);
+  z-index: 1000;
+  cursor: pointer;
+}
+.form_container .password-toogle-icon-signup{
+  position: absolute;
+  top: 61%;
+  right: 62px;
+  transform: translate(-100%);
+  z-index: 1000;
+  cursor: pointer;
+}/**
+.form_container .password-toogle-icon-oldpassword{
+  position: absolute;
+  top: 27.2%;
+  right: 62px;
+  transform: translate(-100%);
+  z-index: 1000;
+  cursor: pointer;
+}
+.form_container .password-toogle-icon-password{
+  position: absolute;
+  top: 44.2%;
+  right: 62px;
+  transform: translate(-100%);
+  z-index: 1000;
+  cursor: pointer;
+}*/

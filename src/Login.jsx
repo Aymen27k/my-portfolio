@@ -4,6 +4,7 @@ import axios from "axios";
 import PropTypes from "prop-types";
 import { LoadingContext } from "./LoadingContext.jsx";
 import LoadingSpinner from "./LoadingSpinner.jsx";
+import usePasswordToggle from "./Components/usePasswordToggle.jsx";
 
 function Login({ setIsLoggedIn }) {
   const [userLogin, setUserLogin] = useState("");
@@ -11,6 +12,8 @@ function Login({ setIsLoggedIn }) {
   //const [rememberme, setRememeberme] = useState(false);
   const [loginError, setLoginError] = useState(false);
   const { isLoading, setLoading } = useContext(LoadingContext);
+  const [passwordInputType, toggleIcon, togglePasswordVisibility] =
+    usePasswordToggle();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -66,10 +69,10 @@ function Login({ setIsLoggedIn }) {
               className="form-control"
             />
           </div>
-          <div className="mb-2">
+          <div className="password-field mb-2">
             <label htmlFor="password">Password</label>
             <input
-              type="password"
+              type={passwordInputType}
               value={password}
               onChange={(e) => setPassword(e.target.value.trim())}
               required
@@ -77,6 +80,12 @@ function Login({ setIsLoggedIn }) {
               placeholder="Enter Your Password"
               className="form-control"
             />
+            <span
+              className="password-toogle-icon"
+              onClick={togglePasswordVisibility}
+            >
+              {toggleIcon}
+            </span>
           </div>
           {/* <div className="mb-2">
           <input
