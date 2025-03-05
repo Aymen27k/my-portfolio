@@ -214,3 +214,48 @@ span{
   75% { transform: translateX(-5px); }
   100% { transform: translateX(0); }
 }
+.gear-icon {
+  cursor: pointer;
+  margin-left: 10px;
+  height: 40px;
+  width: 40px;
+  transition: all 0.2s ease;
+}
+.app-container .dropdown-menu {
+  position: absolute;
+  display: block;
+  padding: 10px; 
+  top: -0.7rem; /* Adjust as needed */
+  right: -20.3rem; /* Adjust as needed */
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  z-index: 10;
+}
+.app-container .dropdown-menu::before {
+  position: absolute;
+  content: "";
+  top: 1rem;
+  right: 18.1rem;
+  width: 25px;
+  height: 25px;
+  transform: rotate(45deg);
+  background-color: white;
+  border-left: solid hsl(0, 0%, 95%);
+  border-bottom: solid hsl(0, 0%, 95%);
+  z-index: -5;
+}
+.gear-icon:active {
+  transform: scale(0.95);
+}
+.logout-icon{
+  width: 24px; 
+  height: 24px;
+}
+.gear-dropdown-container {
+  position: relative;
+}
+.header-container { /* Replace with your actual class name */
+  display: flex;
+  align-items: center;
+}

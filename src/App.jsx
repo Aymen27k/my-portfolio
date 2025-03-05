@@ -9,6 +9,7 @@ import TodoList from "./TodoList.jsx";
 import Signup from "./Signup.jsx";
 import ForgotPassword from "./ForgotPassword.jsx";
 import Login from "./Login.jsx";
+import ChangePassword from "./ChangePassword.jsx";
 import ISSLocation from "./IssLocation.jsx";
 import ResetPassword from "./ResetPassword.jsx";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -41,6 +42,7 @@ const App = () => {
           <Route path="/Signup" element={<Signup />} />
           <Route path="/ForgotPassword" element={<ForgotPassword />} />
           <Route path="/ResetPassword/:token" element={<ResetPassword />} />
+          <Route path="/ChangePassword" element={<ChangePassword />} />
           <Route path="/ISSLocation" element={<ISSLocation />} />
         </Routes>
       </Router>

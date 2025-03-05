@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import api from "./apiClient.js";
 import { LoadingContext } from "./LoadingContext.jsx";
@@ -7,9 +8,11 @@ import LoadingSpinner from "./LoadingSpinner.jsx";
 function TodoList({ setIsLoggedIn }) {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState("");
+  const [dropdownVisible, setDropdownVisible] = useState(false);
   const { isLoading, setLoading } = useContext(LoadingContext);
   const [username, setUsername] = useState(null);
   const loggedInUserId = localStorage.getItem("userId");
+  const navigate = useNavigate();
 
   //Getting the name of the USER to display it as a Header
   useEffect(() => {
@@ -32,6 +35,10 @@ function TodoList({ setIsLoggedIn }) {
       setLoading(false);
     }
   }
+  //Gear icon visibility
+  const toggleDropdown = () => {
+    setDropdownVisible(!dropdownVisible);
+  };
   //Async function to display the Data in my list
   useEffect(() => {
     async function fetchTasks() {
@@ -46,6 +53,10 @@ function TodoList({ setIsLoggedIn }) {
     }
     fetchTasks();
   }, []);
+  //Button Change Password Navigator
+  const handlePasswordChange = () => {
+    navigate("/ChangePassword");
+  };
   //Function that add tasks
   async function addTask() {
     setLoading(true);
@@ -194,7 +205,7 @@ function TodoList({ setIsLoggedIn }) {
         localStorage.removeItem("userId"); // Remove userId
         localStorage.removeItem("items"); //remove Tasks list
         setIsLoggedIn(false);
-        navigate("/Login");
+        navigate("/TodoList");
       } else {
         console.error("Logout failed:", response.data.message);
       }
@@ -207,7 +218,36 @@ function TodoList({ setIsLoggedIn }) {
   return (
     <div className="app-container">
       <header>
-        <h1>{username ? `Hello, ${username}!` : "Welcome!"}</h1>
+        <div className="header-container">
+          <h1>{username ? `Hello, ${username}!` : "Welcome!"}</h1>
+          <div className="gear-dropdown-container">
+            <img
+              src="\gear.png"
+              alt="Settings"
+              onClick={toggleDropdown}
+              className="gear-icon"
+            />
+            {dropdownVisible && (
+              <div className="dropdown-menu">
+                {" "}
+                <button
+                  type="button"
+                  className="btn btn-dark"
+                  onClick={handleLogout}
+                >
+                  Log out
+                  <img src="\logout.png" className="logout-icon"></img>
+                </button>
+                <button
+                  onClick={handlePasswordChange}
+                  className="btn btn-outline-primary ms-2"
+                >
+                  Change Password
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
       </header>
       {isLoading && <LoadingSpinner />}
       <main>
@@ -271,9 +311,6 @@ function TodoList({ setIsLoggedIn }) {
             Clear Completed ToDo
           </button>
         </div>
-        <button type="button" className="btn btn-dark" onClick={handleLogout}>
-          Log out
-        </button>
       </main>
     </div>
   );

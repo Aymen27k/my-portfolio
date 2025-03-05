@@ -16,19 +16,6 @@ app.use(express.json());
 
 //DataBase connection
 connectDB();
-
-/**
- * Get all users from the Database
- */
-app.get("/users", async (req, res) => {
-  try {
-    const users = await User.find();
-    res.json(users);
-  } catch (error) {
-    console.error("Error fetching users: ", error);
-    res.status(500).send("Server error");
-  }
-});
 /**
  * Handles user registration. Also verifies if user already exists by comparing the Email.
  * Adds user to Database with a hashed Password
@@ -93,7 +80,7 @@ app.post("/users/login", async (req, res) => {
       const refreshToken = jwt.sign(
         { userId: User._id, email: User.email },
         process.env.REFRESH_TOKEN_SECRET,
-        { expiresIn: "1d" }
+        { expiresIn: "7d" }
       );
       user.refreshToken = refreshToken;
       res.json({
@@ -107,6 +94,32 @@ app.post("/users/login", async (req, res) => {
   } catch (error) {
     console.error("Error during login: ", error);
     res.status(500).json("Server error");
+  }
+});
+/**
+ * Allow user to change his password after checking his old password matches
+ */
+app.post("/users/password", authMiddleware, async (req, res) => {
+  try {
+    const userId = req.body.userId;
+    const { oldPassword, newPassword } = req.body;
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    const user = await User.findOne({ _id: userId });
+
+    const passwordMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!passwordMatch) {
+      return res.status(400).json({ message: "Incorrect old password" });
+    }
+    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedNewPassword;
+    await user.save();
+    res.status(200).json({ message: "Password updated successfully" });
+    return;
+  } catch (error) {
+    console.error("Error changing the password:", error);
+    res.status(500).json({ message: "Error changing the password" });
   }
 });
 /**
@@ -188,7 +201,7 @@ app.post("/users/refresh_token", async (req, res) => {
         const newRefreshToken = jwt.sign(
           { userId: User._id },
           process.env.REFRESH_TOKEN_SECRET,
-          { expiresIn: "1d" }
+          { expiresIn: "7d" }
         );
 
         // Update user's refresh token in the database (for rotation)
