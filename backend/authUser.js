@@ -216,11 +216,14 @@ app.post("/users/refresh_token", async (req, res) => {
     res.status(500).json({ message: "Error in refresh token process" });
   }
 });
+/**
+ * The API that allow user to get an email in case he forgot his password. Using only his email, he gets a time limited Token for a Reset
+ */
 app.post("/users/forgot-password", async (req, res) => {
   const { email } = req.body;
   try {
     // 1. Check if user exists
-    const user = await User.findOne({ email }); // Replace User with your user model
+    const user = await User.findOne({ email });
     if (!user) {
       return res.status(404).json({ message: "Email not found" });
     }
