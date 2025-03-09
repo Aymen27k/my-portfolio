@@ -9,7 +9,6 @@ import usePasswordToggle from "./Components/usePasswordToggle.jsx";
 function Login({ setIsLoggedIn }) {
   const [userLogin, setUserLogin] = useState("");
   const [password, setPassword] = useState("");
-  //const [rememberme, setRememeberme] = useState(false);
   const [loginError, setLoginError] = useState(false);
   const { isLoading, setLoading } = useContext(LoadingContext);
   const [passwordInputType, toggleIcon, togglePasswordVisibility] =
@@ -87,18 +86,6 @@ function Login({ setIsLoggedIn }) {
               {toggleIcon}
             </span>
           </div>
-          {/* <div className="mb-2">
-          <input
-              type="checkbox"
-              checked={rememberMe}
-              onChange={(e) => setRememeberme(e.target.checked)}
-              id="check"
-              className="custom-control custom-checkbox"
-            />
-            <label htmlFor="check" className="custom-input-label ms-2">
-              Remember me
-            </label>
-          </div>*/}
           <div className="d-grid mt-2">
             <button className="btn btn-primary">Sign in</button>
           </div>

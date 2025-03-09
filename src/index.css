@@ -13,13 +13,22 @@ body {
   min-height: 100vh;
 }
 
-a{
+.navbar a{
     text-decoration: none;
 }
 h1, h2, h3 {
     color: rgb(255, 255, 255);
     text-align: center;
     margin-top: 4rem;
+}
+.notfound-container a{
+  display: flex;
+  flex-direction: column;
+  font-size:xx-large;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+  text-align: center;
 }
 .home{
     margin-top: 5rem;
@@ -42,7 +51,7 @@ label{
     margin-right: 10px; 
   }
 .contact input,.contact button {
-  margin-bottom: 10px; /* Adjust as needed */
+  margin-bottom: 10px;
 }
 .footer{
     position: absolute;
