@@ -68,7 +68,7 @@ function ResetPassword() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              placeholder="Enter Your Password"
+              placeholder="Enter a New Password"
               className="form-control"
             />
           </div>

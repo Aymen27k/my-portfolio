@@ -48,7 +48,7 @@ YouDo is a secure and user-friendly to-do list application designed to help you 
 ## Usage
 
 1.  Navigate through the application using the Navbar.
-2.  Go to the "To-Do List" section.
+2.  Go to the "YouDoList" section.
 3.  Signup or login with your credentials.
 4.  Add, edit, and delete tasks as needed.
 5.  Use the checkbox to mark tasks as complete.

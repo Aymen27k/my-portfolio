@@ -12,10 +12,6 @@ body {
   background-position: center;
   min-height: 100vh;
 }
-
-.navbar a{
-    text-decoration: none;
-}
 h1, h2, h3 {
     color: rgb(255, 255, 255);
     text-align: center;
@@ -181,6 +177,27 @@ span{
       width: 80%;
       padding: 15px;
     } 
+    .navbar {
+      display: none; /* Initially hide on small screens */
+      flex-direction: column;
+      position: absolute;
+      top: 60px; /* Adjust as needed */
+      left: 0;
+      width: 100%;
+      background-color: #fff; /* Or your background color */
+      text-align: center;
+    }
+    .navbar.nav-active {
+      display: flex; /* Show when active */
+    }
+  
+    .navbar a {
+      margin: 10px 0;
+    }
+  
+    .hamburger-menu-button {
+      display: block; /* Show on small screens */
+    }
 }
 .form_container {
   position: absolute;
