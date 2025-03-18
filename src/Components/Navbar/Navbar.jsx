@@ -7,13 +7,14 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const ToggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+    console.log("menu Button clicked", isMenuOpen);
   };
   return (
     <header href="/" className="header">
       <a href="/" className="logo">
         <img src={logoImage} alt="Logo" />
       </a>
-      <button className="hamburger-menu-button">
+      <button className="hamburger-menu-button" onClick={ToggleMenu}>
         <img src="menu_trans.png" alt="hamburger-menu"></img>
       </button>
       <nav className="navbar">

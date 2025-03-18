@@ -172,22 +172,22 @@ span{
   .form_container {
     width: 90%;
   }}
-  @media screen and (max-width: 700px) {
+  @media screen and (max-width: 800px) {
     .form_container {
       width: 80%;
       padding: 15px;
     } 
-    .navbar {
+    .header .navbar {
       display: none; /* Initially hide on small screens */
       flex-direction: column;
       position: absolute;
       top: 60px; /* Adjust as needed */
       left: 0;
       width: 100%;
-      background-color: #fff; /* Or your background color */
+      background-color: hwb(212 18% 65%); /* Or your background color */
       text-align: center;
     }
-    .navbar.nav-active {
+    .header .navbar.nav-active {
       display: flex; /* Show when active */
     }
   
@@ -195,7 +195,7 @@ span{
       margin: 10px 0;
     }
   
-    .hamburger-menu-button {
+    .header .hamburger-menu-button {
       display: block; /* Show on small screens */
     }
 }
