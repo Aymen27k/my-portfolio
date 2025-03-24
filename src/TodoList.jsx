@@ -102,7 +102,7 @@ function TodoList({ setIsLoggedIn }) {
       const response = await api.patch(`/todos/${id}/complete`, {
         completed: !taskToUpdate.completed,
       });
-      console.log(response.data);
+      //console.log(response.data);
       setTasks((prevTasks) =>
         prevTasks.map((task) =>
           task._id === id

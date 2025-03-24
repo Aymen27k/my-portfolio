@@ -22,6 +22,8 @@
     color: white;
     font-weight: 500;
     margin-left: 40px;
+    text-decoration: none;
+    margin-left: 35px;
 }
 .navbar a::before{
     content: '';
@@ -36,3 +38,32 @@
 .navbar a:hover::before{
     width: 100%;
 }
+.header .hamburger-menu-button {
+    display: none; /* Initially hide */
+    font-size: 24px;
+    cursor: pointer;
+  }
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .header .navbar {
+    display: flex;
+  }
+  .header .navbar.nav-active {
+    display: flex; /* Show when active */
+    flex-direction: column;
+    padding-top: 10px;
+  }
+  .header .hamburger-menu-button img {
+ /* Initially hide on larger screens */
+  font-size: 24px;
+  cursor: pointer;
+  position: absolute; /* Or position: fixed; */
+  right: 0;
+  margin: 10px; 
+  z-index: 1000;
+  width: 25px; /* Adjust image width as needed */
+  height: auto; /* Maintain aspect ratio */
+  }
