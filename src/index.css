@@ -181,7 +181,7 @@ span{
       display: none; /* Initially hide on small screens */
       flex-direction: column;
       position: absolute;
-      top: 60px; /* Adjust as needed */
+      top: 105px; /* Adjust as needed */
       left: 0;
       width: 100%;
       background-color: hwb(212 18% 65%); /* Or your background color */
